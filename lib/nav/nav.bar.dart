@@ -1,12 +1,11 @@
-import 'package:bluejobs_user/screensforhome/notification.dart';
+
 import 'package:flutter/material.dart';
 import 'package:bluejobs_user/screensforhome/create_post.dart';
 import 'package:bluejobs_user/screensforhome/home.dart';
 import 'package:bluejobs_user/screensforhome/messaging.dart';
 import 'package:bluejobs_user/screensforhome/search.dart';
 import 'package:bluejobs_user/screensforhome/profile_page.dart';
-//animation
-//import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+
 
 class NavBarPage extends StatefulWidget {
  const NavBarPage({super.key});
@@ -19,10 +18,12 @@ class _NavBarPageState extends State<NavBarPage> {
  int _selectedIndex = 0;
  List<Widget> screensforhome = <Widget>[
     HomePage(),
-    NotificationsPage(),
-    ProfilePage(),
+    SearchPage(),
     CreatePostPage(),
     MessagingPage(),
+    ProfilePage(),
+    
+    
  ];
 
  @override
