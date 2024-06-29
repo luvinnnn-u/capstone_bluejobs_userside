@@ -1,13 +1,13 @@
-// //working na to try ko lang yung may polka dot
 import 'package:bluejobs_user/screens/signup.dart';
 import 'package:bluejobs_user/styles/textstyle.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:bluejobs_user/styles/custom_button.dart';
 import 'package:bluejobs_user/styles/responsive_utils.dart';
 import 'package:bluejobs_user/screens/password_change.dart';
 import 'package:bluejobs_user/nav/nav.bar.dart'; //for nav
+
+
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -47,14 +47,6 @@ class _SignInPageState extends State<SignInPage> {
                 'assets/images/bluejobs.svg',
                 width: 100,
                 height: 100,
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Connecting Blue Collars. One Tap at a time!',
-                style: CustomTextStyle.semiBoldText.copyWith(
-                  color: Colors.white,
-                  fontSize: responsiveSize(context, 0.03),
-                ),
               ),
               const SizedBox(height: 20),
               TextField(

@@ -10,112 +10,190 @@ import 'package:bluejobs_user/styles/custom_button.dart';
 import 'package:confetti/confetti.dart';
 import 'dart:async'; //for timer
 import 'package:bluejobs_user/styles/custom_inkwell_signup.dart';
-import 'package:bluejobs_user/screens/employer_form.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final FocusNode _fullNameFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
+  bool _isFullNameFocused = false;
+  bool _isEmailFocused = false;
+  bool _isEmployer = false; // Track if the user is an Employer
+
+  @override
+  void initState() {
+    super.initState();
+    _fullNameFocusNode.addListener(_onFocusChange);
+    _emailFocusNode.addListener(_onFocusChange);
+  }
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _emailController.dispose();
+    _fullNameFocusNode.dispose();
+    _emailFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    setState(() {
+      _isFullNameFocused = _fullNameFocusNode.hasFocus;
+      _isEmailFocused = _emailFocusNode.hasFocus;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(children: [
-        const SizedBox(
-          height: 50,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Are you a Blue Collar Job Hunter or an Employer?",
+                  style: CustomTextStyle.semiBoldText.copyWith(
+                    fontSize: responsiveSize(context, 0.05),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: ListBody(
+                children: [
+                  const SizedBox(height: 20),
+                  // InkWell(
+                  //   onTap: () {
+                  //     setState(() {
+                  //       _isEmployer = false; // Set user as Blue Collar Job Hunter
+                  //     });
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => BlueCollarJobHuntersForm(),
+                  //       ),
+                  //     );
+                  //   },
+                  //   child: Container(
+                  //     width: MediaQuery.of(context).size.width - 50,
+                  //     height: 54,
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(5),
+                  //       color: const Color.fromARGB(255, 7, 30, 47),
+                  //     ),
+                  //     child: Center(
+                  //       child: Text(
+                  //         'I am a Blue Collar Job Hunter',
+                  //         style: CustomTextStyle.regularText.copyWith(
+                  //           color: Colors.white,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  InkWell(
+  onTap: () {
+    setState(() {
+      _isEmployer = false; // Set user as Blue Collar Job Hunter
+    });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlueCollarJobHuntersForm(isEmployer: _isEmployer),
+      ),
+    );
+  },
+  child: Container(
+    width: MediaQuery.of(context).size.width - 50,
+    height: 54,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(5),
+      color: const Color.fromARGB(255, 7, 30, 47),
+    ),
+    child: Center(
+      child: Text(
+        'I am a Blue Collar Job Hunter',
+        style: CustomTextStyle.regularText.copyWith(
+          color: Colors.white,
         ),
-        Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Are you a Blue Collar Job Hunter or an Employer",
-                  style: CustomTextStyle.semiBoldText
-                      .copyWith(fontSize: responsiveSize(context, 0.05))),
-            )),
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: ListBody(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                  onTap: () {
-                    Navigator.push(
+      ),
+    ),
+  ),
+),
+
+                  const SizedBox(height: 20),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isEmployer = true; // Set user as Employer
+                      });
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => BlueCollarJobHuntersForm()));
-                  },
-                  child: Container(
-                      width: MediaQuery.of(context).size.width -
-                          50, // Adjust the width to match the input fields
-                      height: 55,
-                      child: InputDecorator(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                5), // Set border radius to 5
+                          builder: (context) => BlueCollarJobHuntersForm(isEmployer: _isEmployer), // Navigate to the same form for both types of users
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 50,
+                      height: 54,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: const Color.fromARGB(255, 7, 30, 47),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'I am an Employer',
+                          style: CustomTextStyle.regularText.copyWith(
+                            color: Colors.white,
                           ),
-                          fillColor: const Color.fromARGB(255, 7, 30, 47),
-                          filled: true,
                         ),
-                        child: Center(
-                          child: Text('I am a Blue Collar Job Hunter',
-                              style: CustomTextStyle.regularText.copyWith(
-                                color: Colors.white,
-                              )),
-                        ),
-                      ))),
-              const SizedBox(
-                height: 20,
-              ),
-              InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EmployerForm()));
-                  },
-                  child: Container(
-                      //padding: EdgeInsets.only(left: 10),
-                      width: MediaQuery.of(context).size.width -
-                          50, // Adjust the width to match the input fields
-                      height: 55,
-                      child: InputDecorator(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                5), // Set border radius to 5
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  if (!_isEmployer) // Only show this for Blue Collar Job Hunters
+                    CustomButton(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ButtonSpecializationPage(),
                           ),
-                          fillColor: const Color.fromARGB(
-                              255, 7, 30, 47), // Set background color
-                          filled:
-                              true, // Use filled property to apply the background color
-                        ),
-                        child: Center(
-                          child: Text('I am an Employer',
-                              style: CustomTextStyle.regularText.copyWith(
-                                color: Colors.white,
-                              )),
-                        ),
-                      ))),
-              const SizedBox(
-                height: 20,
+                        );
+                      },
+                      buttonText: 'Next',
+                    ),
+                ],
               ),
-            ],
-          ),
-        )
-      ]),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
 class BlueCollarJobHuntersForm extends StatefulWidget {
-  const BlueCollarJobHuntersForm({super.key});
+  final bool isEmployer; // Declare the isEmployer variable
+
+  const BlueCollarJobHuntersForm({
+    Key? key,
+    required this.isEmployer, // Modify the constructor to require isEmployer
+  }) : super(key: key);
 
   @override
   State<BlueCollarJobHuntersForm> createState() =>
@@ -173,20 +251,23 @@ class _BlueCollarJobHuntersFormState extends State<BlueCollarJobHuntersForm> {
                 height: 20,
               ),
               Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: ListBody(
                   children: [
                     TextField(
                       controller: _fullNameController,
                       focusNode: _fullNameFocusNode,
                       decoration: customInputDecoration('Full Name'),
+                      style: const TextStyle(color: Colors.black),
+                      
                     ),
                     if (_isFullNameFocused)
-                      const Padding(
-                        padding: EdgeInsets.only(top: 8.0),
+                       Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
                         child: Text(
                           'Enter your full name. Ex. Juan A. Dela CRUZ',
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                          // style: TextStyle(color: Colors.grey, fontSize: 12),
+                          style: CustomTextStyle.regularText.copyWith(color: Colors.grey),
                         ),
                       ),
                     const SizedBox(
@@ -295,7 +376,7 @@ class _ProfileUploadPageState extends State<ProfileUploadPage> {
             height: 20,
           ),
           Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: ListBody(
               children: [
                 InkWell(
@@ -308,12 +389,12 @@ class _ProfileUploadPageState extends State<ProfileUploadPage> {
                       borderRadius: BorderRadius.circular(
                           5), // This removes the rounded corners
                       border: Border.all(
-                        color: Color.fromARGB(
+                        color: const Color.fromARGB(
                             255, 19, 52, 77), // Set the border color to blue
                         width: 1, // Set the border width
                       ),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text('Pick Image',
                           style: TextStyle(
                               color:
@@ -332,12 +413,12 @@ class _ProfileUploadPageState extends State<ProfileUploadPage> {
                       borderRadius: BorderRadius.circular(
                           5), // This removes the rounded corners
                       border: Border.all(
-                        color: Color.fromARGB(
+                        color: const Color.fromARGB(
                             255, 19, 52, 77), // Set the border color to blue
                         width: 1, // Set the border width
                       ),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text('Take Picture',
                           style: TextStyle(
                               color:
@@ -412,7 +493,7 @@ class _AddressPageState extends State<AddressPage> {
                   controller: _addressController,
                   decoration:
                       customInputDecoration('Find your Address').copyWith(
-                    suffixIcon: Icon(Icons.search),
+                    suffixIcon: const Icon(Icons.search),
                   ),
                 ),
                 const SizedBox(
@@ -523,122 +604,6 @@ class _UsernamePageState extends State<UsernamePage> {
   }
 }
 
-// class CodePage extends StatefulWidget {
-//   const CodePage({super.key});
-
-//   @override
-//   State<CodePage> createState() => _CodePageState();
-// }
-
-// class _CodePageState extends State<CodePage> {
-//   final TextEditingController _codeController = TextEditingController();
-//   final FocusNode _codeFocusNode = FocusNode();
-//   bool _isCodeFocused = false;
-//   StreamController<int>? _streamController;
-//   int _start = 120; // 2 minutes in seconds
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _codeFocusNode.addListener(_onFocusChange);
-//     _startTimer();
-//   }
-
-//   void _startTimer() {
-//     _streamController = StreamController<int>();
-//     Timer.periodic(Duration(seconds: 1), (timer) {
-//       if (_start == 0) {
-//         timer.cancel();
-//         _streamController?.close();
-//       } else {
-//         _start--;
-//         _streamController?.add(_start);
-//       }
-//     });
-//   }
-
-//   @override
-//   void dispose() {
-//     _codeController.dispose();
-//     _codeFocusNode.dispose();
-//     _streamController?.close();
-//     super.dispose();
-//   }
-
-//   void _onFocusChange() {
-//     setState(() {
-//       _isCodeFocused = _codeFocusNode.hasFocus;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         appBar: AppBar(),
-//         body: Column(children: [
-//           const SizedBox(height: 50),
-//           Padding(
-//               padding: const EdgeInsets.only(left: 10),
-//               child: Align(
-//                 alignment: Alignment.centerLeft,
-//                 child: Text("A code was sent to your account!",
-//                     style: CustomTextStyle.semiBoldText
-//                         .copyWith(fontSize: responsiveSize(context, 0.05))),
-//               )),
-//           const SizedBox(height: 20),
-//           Padding(
-//             padding: const EdgeInsets.all(10),
-//             child: ListBody(children: [
-//               TextField(
-//                 controller: _codeController,
-//                 focusNode: _codeFocusNode,
-//                 decoration: customInputDecoration('Code here'),
-//               ),
-//               if (_isCodeFocused)
-//                 const Padding(
-//                   padding: const EdgeInsets.only(top: 8.0),
-//                   child: Text(
-//                     'Go to your email and enter the code sent to you.',
-//                     style: TextStyle(color: Colors.grey, fontSize: 12),
-//                   ),
-//                 ),
-//               const SizedBox(height: 20),
-//               StreamBuilder<int>(
-//                 stream: _streamController?.stream,
-//                 builder: (context, snapshot) {
-//                   if (snapshot.hasData) {
-//                     final minutes = snapshot.data! ~/ 60;
-//                     final seconds = snapshot.data! % 60;
-//                     return Text(
-//                         'Resend the code in: ${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}');
-//                   } else {
-//                     return ElevatedButton(
-//                       onPressed: () {
-//                         // Implement your logic to resend the code here
-//                         print('Resend the code');
-//                         _start = 120; // Reset the timer
-//                         _startTimer();
-//                       },
-//                       child: Text('Resend the code'),
-//                     );
-//                   }
-//                 },
-//               ),
-//               const SizedBox(height: 20),
-//               CustomButton(
-//                   onTap: () {
-//                     Navigator.push(
-//                         context,
-//                         MaterialPageRoute(
-//                             builder: (context) => const PasswordPage()));
-//                   },
-//                   buttonText: 'Next'),
-//             ]),
-//           )
-//         ]));
-//   }
-// }
-
 // //password
 class PasswordPage extends StatefulWidget {
   const PasswordPage({super.key});
@@ -685,7 +650,7 @@ class _PasswordPageState extends State<PasswordPage> {
               children: [
                 Text(
                   'Create a password with the combination of letters, numbers, and special characters.',
-                  style: CustomTextStyle.LightText.copyWith(
+                  style: CustomTextStyle.lightText.copyWith(
                     fontSize: responsiveSize(context, 0.03),
                   ),
                 ),
@@ -694,10 +659,6 @@ class _PasswordPageState extends State<PasswordPage> {
                   controller: _passwordController,
                   decoration: customInputDecoration(
                     'Password',
-                    //  suffixIcon: IconButton(icon: Icon(Icons.lock_clock_rounded),
-                    //   onPressed: () {
-                    //     // Handle the button tap here
-                    //     },
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -739,7 +700,7 @@ class _DoneCreatePageState extends State<DoneCreatePage> {
 //final GlobalKey<ConfettiController> _confettiKey = GlobalKey<ConfettiController>();
 //final GlobalKey _confettiKey = GlobalKey();
   final ConfettiController _confettiKey =
-      ConfettiController(duration: Duration(seconds: 10));
+      ConfettiController(duration: const Duration(seconds: 10));
 
   @override
   void initState() {
@@ -785,9 +746,10 @@ class _DoneCreatePageState extends State<DoneCreatePage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const NavBarPage()));
+                                  //builder: (context) => const NavBarPage()));
+                                    builder: (context) => const ButtonSpecializationPage()));
                         },
-                        buttonText: 'Get Started'),
+                        buttonText: 'Next'),
                   ],
                 ),
               )
@@ -795,71 +757,137 @@ class _DoneCreatePageState extends State<DoneCreatePage> {
   }
 }
 
-//employer
-class EmployerForm extends StatefulWidget {
-  const EmployerForm({super.key});
+
+class ButtonSpecializationPage extends StatefulWidget {
+  const ButtonSpecializationPage({super.key});
 
   @override
-  State<EmployerForm> createState() => _EmployerFormState();
+  State<ButtonSpecializationPage> createState() => _ButtonSpecializationPageState();
 }
 
-class _EmployerFormState extends State<EmployerForm> {
+class _ButtonSpecializationPageState extends State<ButtonSpecializationPage> {
+  final List<String> skills = [
+    "Carpentry",
+    "Plumbing",
+    "Sewing",
+    "Doing Laundry",
+    "Electrician",
+    "Mechanic",
+    "Construction Worker",
+    "Factory Worker",
+    "Welder",
+    "Painter",
+    "Landscaper",
+    "Janitor",
+    "HVAC Technician",
+    "Heavy Equipment Operator",
+    "Truck Driver",
+    "Roofer",
+    "Mason",
+    "Steelworker",
+    "Pipefitter",
+    "Boilermaker",
+    "Chef",
+    "Butcher",
+    "Baker",
+    "Fisherman",
+    "Miner",
+    "Housekeeper",
+    "Security Guard",
+    "Firefighter",
+    "Paramedic",
+    "Nursing Assistant",
+    "Retail Worker",
+    "Warehouse Worker"
+  ];
+
+  final Set<String> selectedSkills = {};
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 50,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Text('Hmmm... Blue Collar Job Hunter or an Employer?',
-                style: CustomTextStyle.semiBoldText
-                    .copyWith(fontSize: responsiveSize(context, 0.05))),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.all(10),
-            child: ListBody(
-              children: [
-                const SizedBox(
-                  height: 20,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Choose what you are good at!",
+                  style: CustomTextStyle.titleText.copyWith(fontSize: responsiveSize(context, 0.05)),
                 ),
-                CustomInkWellButton(
-                  buttonText: 'Residential',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ResidentialEmployerPage()),
-                    );
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomInkWellButton(
-                  buttonText: 'Small time Business Owner',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BlueCollarJobHuntersForm()),
-                    );
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
+              ),
             ),
-          )
-        ],
+            const SizedBox(height: 30),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Wrap(
+                    spacing: 8.0,
+                    runSpacing: 4.0,
+                    children: skills.map((skill) {
+                      final isSelected = selectedSkills.contains(skill);
+                      return ChoiceChip(
+                        label: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              skill,
+                              style: TextStyle(
+                                color: isSelected ? Colors.white : const Color.fromARGB(255, 12, 14, 16),
+                                fontSize: responsiveSize(context, 0.03),
+                              ),
+                            ),
+                            if (isSelected) ...[
+                              const SizedBox(width: 4),
+                              const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                            ]
+                          ],
+                        ),
+                        selected: isSelected,
+                        selectedColor: const Color.fromARGB(255, 19, 52, 77),
+                        onSelected: (selected) {
+                          setState(() {
+                            if (selected) {
+                              selectedSkills.add(skill);
+                            } else {
+                              selectedSkills.remove(skill);
+                            }
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            CustomButton(
+              onTap: selectedSkills.isNotEmpty
+                  ? () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const NavBarPage()),
+                      );
+                    }
+                  :(){},
+              buttonText: 'Get Started',
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
+

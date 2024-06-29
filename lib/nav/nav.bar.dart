@@ -34,11 +34,11 @@ class _NavBarPageState extends State<NavBarPage> {
       body: screensforhome[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home),label: 'Home',),
-          BottomNavigationBarItem(icon: Icon(Icons.search_rounded),label: 'Search',),
-          BottomNavigationBarItem(icon: Icon(Icons.add_box),label: 'Create ',),
-          BottomNavigationBarItem(icon: Icon(Icons.message),label: 'Chats',),
-          BottomNavigationBarItem(icon: Icon(Icons.person),label: 'Profile',),
+          BottomNavigationBarItem(icon: Icon(Icons.home),label: '',),
+          BottomNavigationBarItem(icon: Icon(Icons.search_rounded),label: '',),
+          BottomNavigationBarItem(icon: Icon(Icons.add_box),label: ' ',),
+          BottomNavigationBarItem(icon: Icon(Icons.message),label: '',),
+          BottomNavigationBarItem(icon: Icon(Icons.person),label: '',),
         ],
         unselectedItemColor: Color.fromARGB(255, 19, 8, 8),
         selectedItemColor: Color.fromARGB(255, 7, 16, 69),
@@ -58,17 +58,17 @@ class _NavBarPageState extends State<NavBarPage> {
 }
 
 
-class EmployerNavBarPage extends StatefulWidget {
-  const EmployerNavBarPage({super.key});
+// class EmployerNavBarPage extends StatefulWidget {
+//   const EmployerNavBarPage({super.key});
 
-  @override
-  State<EmployerNavBarPage> createState() => _EmployerNavBarPageState();
-}
+//   @override
+//   State<EmployerNavBarPage> createState() => _EmployerNavBarPageState();
+// }
 
-class _EmployerNavBarPageState extends State<EmployerNavBarPage> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
+// class _EmployerNavBarPageState extends State<EmployerNavBarPage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }
 
