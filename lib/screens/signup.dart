@@ -75,35 +75,6 @@ class _SignUpPageState extends State<SignUpPage> {
               child: ListBody(
                 children: [
                   const SizedBox(height: 20),
-                  // InkWell(
-                  //   onTap: () {
-                  //     setState(() {
-                  //       _isEmployer = false; // Set user as Blue Collar Job Hunter
-                  //     });
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => BlueCollarJobHuntersForm(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     width: MediaQuery.of(context).size.width - 50,
-                  //     height: 54,
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(5),
-                  //       color: const Color.fromARGB(255, 7, 30, 47),
-                  //     ),
-                  //     child: Center(
-                  //       child: Text(
-                  //         'I am a Blue Collar Job Hunter',
-                  //         style: CustomTextStyle.regularText.copyWith(
-                  //           color: Colors.white,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   InkWell(
   onTap: () {
     setState(() {
@@ -873,14 +844,12 @@ class _ButtonSpecializationPageState extends State<ButtonSpecializationPage> {
             ),
             const SizedBox(height: 10),
             CustomButton(
-              onTap: selectedSkills.isNotEmpty
-                  ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const NavBarPage()),
-                      );
-                    }
-                  :(){},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NavBarPage()),
+                );
+              },
               buttonText: 'Get Started',
             ),
           ],

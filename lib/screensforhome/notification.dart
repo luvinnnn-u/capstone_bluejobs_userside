@@ -1,6 +1,6 @@
-import 'package:bluejobs_user/styles/textstyle.dart';
 import 'package:flutter/material.dart';
-//mport 'package:bluejobs_user/styles/customtextstyle.dart'; // Updated import based on your class name
+import 'package:bluejobs_user/styles/textstyle.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationItem {
   final String message;
@@ -38,95 +38,121 @@ class _NotificationsPageState extends State<NotificationsPage> {
       message: 'New job listing available',
       date: DateTime(2024, 6, 24),
     ),
+    NotificationItem(
+      message: 'Welcome to BlueJobs',
+      date: DateTime(2024, 6, 24),
+    ),
   ];
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    initializeNotifications();
+  }
+
+  void initializeNotifications() {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<void> showNotification(String message) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'your_channel_id',
+      'your_channel_name',
+      //'your_channel_description',
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'BlueJobs Notification',
+      message,
+      platformChannelSpecifics,
+      payload: 'item x',
+    );
+  }
+
+  Future<void> _refreshNotifications() async {
+    // Simulate network call
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      // Update the notifications list
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              // Navigate to settings page or show settings dialog
-            },
-          ),
-        ],
-      ),
-      body: notifications.isEmpty
-        ? Center(
-              child: Text('No notifications', style: CustomTextStyle.regularText), // Use regularText style here
-            )
-          : ListView.builder(
-              itemCount: notifications.length,
-              itemBuilder: (context, index) {
-                final notification = notifications[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                  child: ListTile(
-                    leading: notification.message == 'Your application has been approved'
-                      ? Icon(Icons.check_circle, size: 50, color: const Color.fromARGB(255, 7, 30, 47))
-                        : notification.message == 'New job listing available'
-                          ? Icon(Icons.group_work, size: 50, color: const Color.fromARGB(255, 7, 30, 47))
-                            : CircleAvatar(
-                                radius: 30,
-                                backgroundImage: AssetImage('assets/images/meanne.jpg'),
-                              ),
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(notification.message, style: CustomTextStyle.regularText), // Apply regularText style here
-                        if (index == 0 || index == 1) // Only show buttons for the top notifications
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    foregroundColor: Colors.blue,
-                                    side: BorderSide(color: Colors.blue),
-                                  ),
-                                  onPressed: () {
-                                    // Handle accept action
-                                  },
-                                  child: Text('Accept'),
-                                ),
-                                SizedBox(width: 8),
-                                OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    foregroundColor: Colors.black,
-                                    side: BorderSide(color: Colors.grey),
-                                    backgroundColor: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    // Handle delete action
-                                  },
-                                  child: Text('Delete'),
-                                ),
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
+      appBar: AppBar(),
+      body: RefreshIndicator(
+        onRefresh: _refreshNotifications,
+        child: notifications.isEmpty
+            ? Center(
+                child: Text('No notifications', style: CustomTextStyle.regularText),
+              )
+            : ListView.builder(
+                itemCount: notifications.length,
+                itemBuilder: (context, index) {
+                  final notification = notifications[index];
+                  return ListTile(
+                    leading: _getLeadingIcon(notification.message),
+                    title: Text(notification.message, style: CustomTextStyle.regularText),
                     subtitle: Text(
                       '${notification.date.day}/${notification.date.month}/${notification.date.year}',
-                      style: CustomTextStyle.semiBoldText, // Use semiBoldText for subtitle
+                      style: CustomTextStyle.regularText,
                     ),
+                    trailing: notification.message == 'Employer2 wants to connect with you'
+                        ? OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.blue,
+                              side: BorderSide(color: Colors.blue),
+                            ),
+                            onPressed: () {
+                              // Handle accept action
+                              showNotification('You accepted the connection request');
+                            },
+                            child: Text('Accept'),
+                          )
+                        : null,
                     onTap: () {
                       // Handle tapping on a notification
+                      showNotification(notification.message);
                     },
-                  ),
-                );
-              },
-            ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your logic for handling notifications refresh or other actions
-        },
-        child: const Icon(Icons.refresh),
+                  );
+                },
+              ),
       ),
     );
   }
+
+  Widget _getLeadingIcon(String message) {
+    switch (message) {
+      case 'Your application has been approved':
+        return Icon(Icons.check_circle, size: 50, color: Color.fromARGB(255, 7, 30, 47));
+      case 'New job listing available':
+        return Icon(Icons.group_work, size: 50, color: Color.fromARGB(255, 7, 30, 47));
+      case 'Welcome to BlueJobs':
+        return Icon(Icons.ac_unit, size: 50, color: Color.fromARGB(255, 7, 30, 47));
+      default:
+        return CircleAvatar(
+          radius: 30,
+          backgroundImage: AssetImage('assets/images/meanne.jpg'),
+        );
+    }
+  }
 }
+

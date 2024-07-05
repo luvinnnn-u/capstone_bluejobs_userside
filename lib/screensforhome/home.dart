@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bluejobs_user/screensforhome/notification.dart';
 import 'package:bluejobs_user/styles/textstyle.dart';
 import 'package:bluejobs_user/styles/responsive_utils.dart';
+import 'package:bluejobs_user/screensforhome/find_others.dart';
 
 enum UserType { employer, regularUser }
 
@@ -37,7 +38,8 @@ class _HomePageState extends State<HomePage> {
     Post(
       avatarImagePath: 'assets/images/meanne.jpg',
       username: 'Employer',
-      content: 'Hi I am looking for a plumber who can work for me. Will work mainly on leaking pipes on the sink. 500 pesos would be the payment.',
+      content:
+          'Hi I am looking for a plumber who can work for me. Will work mainly on leaking pipes on the sink. 500 pesos would be the payment.',
       place: 'Lives in Albay',
       isEmployer: true,
     ),
@@ -45,6 +47,13 @@ class _HomePageState extends State<HomePage> {
       avatarImagePath: 'assets/images/marlo.jpg',
       username: 'Employee',
       content: 'Hi I am looking for work. 500 pesos would be the payment.',
+      place: 'Lives in Albay',
+      isEmployer: false,
+    ),
+    Post(
+      avatarImagePath: 'assets/images/dado.jpg',
+      username: 'Employee',
+      content: 'Hi I am looking for work. 500 pesos would be the .',
       place: 'Lives in Albay',
       isEmployer: false,
     ),
@@ -86,6 +95,29 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(
+      //   leading: GestureDetector(
+      //     onTap: () {
+      //       _scrollController.animateTo(
+      //         0.0,
+      //         duration: const Duration(milliseconds: 500),
+      //         curve: Curves.easeOut,
+      //       );
+      //     },
+      //     child: Image.asset('assets/images/bluejobs.png'),
+      //   ),
+      //   actions: <Widget>[
+      //     IconButton(
+      //       icon: const Icon(Icons.notifications),
+      //       onPressed: () {
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(builder: (context) => const NotificationsPage()),
+      //         );
+      //       },
+      //     ),
+      //   ],
+      // ),
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
@@ -103,14 +135,26 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const NotificationsPage()),
+                MaterialPageRoute(
+                    builder: (context) => const NotificationsPage()),
               );
+            },
+          ),
+          IconButton(
+            icon: const Icon(
+                Icons.find_in_page), // This is the new icon for finding others
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FindOthersPage()),
+              ); // Navigate to the FindOthersPage
             },
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 20.0), // Adjust padding as needed
+        padding: const EdgeInsets.fromLTRB(
+            15.0, 20.0, 15.0, 20.0), // Adjust padding as needed
         child: ListView.builder(
           controller: _scrollController,
           itemCount: posts.length,
@@ -145,9 +189,9 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Text(
                                 post.username,
-                                style: CustomTextStyle.semiBoldText.copyWith(
+                                style: CustomTextStyle.titleText.copyWith(
                                   color: const Color.fromARGB(255, 0, 0, 0),
-                                  fontSize: responsiveSize(context, 0.05),
+                                  fontSize: responsiveSize(context, 0.04),
                                 ),
                               ),
                               Row(
@@ -223,7 +267,8 @@ class _HomePageState extends State<HomePage> {
                                   child: Center(
                                     child: Text(
                                       'Apply Now',
-                                      style: CustomTextStyle.regularText.copyWith(
+                                      style:
+                                          CustomTextStyle.regularText.copyWith(
                                         color: Colors.white,
                                         fontSize: responsiveSize(context, 0.03),
                                       ),
@@ -250,8 +295,10 @@ class _HomePageState extends State<HomePage> {
                                   child: Center(
                                     child: Text(
                                       'Save for Later',
-                                      style: CustomTextStyle.regularText.copyWith(
-                                        color: const Color.fromARGB(255, 0, 0, 0),
+                                      style:
+                                          CustomTextStyle.regularText.copyWith(
+                                        color:
+                                            const Color.fromARGB(255, 0, 0, 0),
                                         fontSize: responsiveSize(context, 0.03),
                                       ),
                                     ),
@@ -282,7 +329,8 @@ class _HomePageState extends State<HomePage> {
                                 onTap: () {
                                   // Toggle visibility of comment input field and post button for this post
                                   setState(() {
-                                    _showCommentInput[index] = !_showCommentInput[index]!;
+                                    _showCommentInput[index] =
+                                        !_showCommentInput[index]!;
                                   });
                                 },
                                 child: Row(
@@ -314,7 +362,9 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                     // Visibility widget for comment input
-                    const SizedBox(height: 15,),
+                    const SizedBox(
+                      height: 15,
+                    ),
                     Visibility(
                       visible: _showCommentInput[index] ?? false,
                       child: Row(
@@ -341,8 +391,7 @@ class _HomePageState extends State<HomePage> {
                             height: 53,
                             width: 70,
                             decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 
-7, 30, 47),
+                              color: const Color.fromARGB(255, 7, 30, 47),
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: InkWell(
@@ -372,4 +421,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
