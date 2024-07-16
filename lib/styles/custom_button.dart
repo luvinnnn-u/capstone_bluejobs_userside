@@ -21,7 +21,7 @@ class CustomButton extends StatelessWidget {
     this.textColor = Colors.white,
     this.width = double.infinity,
     this.height = 50,
-    this.borderRadius = 5,
+    this.borderRadius = 15,   //from 15 to 25
     this.borderWidth = 1,
     this.borderColor = const Color.fromARGB(255, 243, 107, 4),
   }) : super(key: key);
@@ -44,7 +44,7 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: Text(
             buttonText,
-            style: CustomTextStyle.regularText.copyWith(
+            style: CustomTextStyle.semiBoldText.copyWith(
               color: textColor,
             ),
           ),

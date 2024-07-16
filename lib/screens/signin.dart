@@ -6,6 +6,8 @@ import 'package:bluejobs_user/styles/custom_button.dart';
 import 'package:bluejobs_user/styles/responsive_utils.dart';
 import 'package:bluejobs_user/screens/password_change.dart';
 import 'package:bluejobs_user/nav/nav.bar.dart'; //for nav
+import 'package:bluejobs_user/styles/custom_theme.dart';
+
 
 
 
@@ -32,10 +34,12 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 7, 30, 47),
+          //backgroundColor: Color.fromARGB(255, 7, 30, 47),
+          backgroundColor: Color.fromARGB(255, 7, 30, 47)
+          
         ),
-        backgroundColor: Color.fromARGB(255, 19, 52, 77),
-        //backgroundColor: Color(0xFF0A5BF5),
+        backgroundColor: Color.fromARGB(255, 7, 30, 47),  // original color
+        //backgroundColor: Color.fromARGB(255, 7, 30, 47),
         body:
        Center(
             child: Padding(
@@ -50,42 +54,35 @@ class _SignInPageState extends State<SignInPage> {
               ),
               const SizedBox(height: 20),
               TextField(
-                controller: _userNameController,
-                decoration: const InputDecoration(
-                    labelText: 'Username',
-                    labelStyle: CustomTextStyle.regularText,
-                    fillColor:
-                        Colors.white, // Set the background color to white
-                    filled: true,
-                    border: OutlineInputBorder()),
-              ),
+  controller: _userNameController,
+  decoration: customInputDecoration('  Username', 
+  //fillColor: Colors.white
+  ),
+   style: const TextStyle(color: Colors.white),
+  //style:backgroundColorcolor.Colors.white,
+),
+
               const SizedBox(height: 20),
               TextField(
-                controller: _passwordController,
-                obscureText:
-                    _obscureText, // Use the _obscureText variable to control the visibility
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  labelStyle: CustomTextStyle
-                      .regularText, // Assuming CustomTextStyle is defined elsewhere
-                  fillColor: Colors.white, // Set the background color to white
-                  filled: true,
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      // Choose the icon based on whether the text is obscured
-                      _obscureText ? Icons.visibility : Icons.visibility_off,
-                      color: Theme.of(context).primaryColorDark,
-                    ),
-                    onPressed: () {
-                      // Toggle the state of _obscureText between true and false
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                  ),
-                ),
-              ),
+  controller: _passwordController,
+  obscureText: _obscureText,
+  decoration: customInputDecoration(
+    '  Password',
+    suffixIcon: IconButton(
+      icon: Icon(
+        _obscureText ? Icons.visibility : Icons.visibility_off,
+        color: Theme.of(context).primaryColorDark,
+      ),
+      onPressed: () {
+        setState(() {
+          _obscureText = !_obscureText;
+        }
+        );
+      },
+    ),
+  ),
+  style: const TextStyle(color: Colors.white),
+),
               const SizedBox(
                 height: 20,
               ),

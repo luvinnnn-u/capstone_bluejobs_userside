@@ -12,7 +12,7 @@ class CustomInkwellForHomeButtonllButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 50, // Set the height to 50
+        height: 45, // Set the height to 50 but i turned it 45
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 19, 52, 77), // Fixed color
