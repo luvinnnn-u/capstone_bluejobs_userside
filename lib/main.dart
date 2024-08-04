@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        // scaffoldBackgroundColor: Color.fromARGB(255, 7, 30, 47),  //for background ng lahat
-       scaffoldBackgroundColor: Color.fromARGB(255, 7, 34, 54),
+         scaffoldBackgroundColor: Color.fromARGB(255, 7, 30, 47),  //for background ng lahat
+       //scaffoldBackgroundColor: Color.fromARGB(255, 7, 34, 54),
          colorScheme:
             ColorScheme.fromSeed(seedColor: Color.fromARGB(0, 5, 5, 5)),
         useMaterial3: true,

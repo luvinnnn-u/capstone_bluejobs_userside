@@ -72,7 +72,7 @@ class _MessagingPageState extends State<MessagingPage> {
  @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
+      appBar: AppBar(
       backgroundColor: Color.fromARGB(255, 7, 30, 47),
       leading: IconButton(
         icon: Icon(Icons.arrow_back, color: Colors.white), // Customize the back button icon and color

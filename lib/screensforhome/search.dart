@@ -22,67 +22,73 @@ class _SearchPageState extends State<SearchPage> {
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Search', style: CustomTextStyle.semiBoldText),
+        //title: Text('Search', style: CustomTextStyle.semiBoldText),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
+        body: Padding(
+    padding: EdgeInsets.all(10),
+    child: Column(
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search...',
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide(color: Colors.blueAccent),
-                      ),
-                    ),
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Container(
-                  height: 40, // Set the height to match the TextField
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                    ),
-                    child: Icon(Icons.search),
-                  ),
-                ),
-              ],
-            ),
             Expanded(
-              child: ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: users[index]['profilePic'].startsWith('http')
-                          ? NetworkImage(users[index]['profilePic'])
-                          : AssetImage(users[index]['profilePic']) as ImageProvider,
-                    ),
-                    title: Text(users[index]['username'], style: CustomTextStyle.regularText,),
-                  );
-                },
+              child: TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Search...',
+                  hintStyle: CustomTextStyle.regularText,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: const BorderSide(width: 2, color: Colors.white),
+                  ),
+                ),
+                style: CustomTextStyle.regularText,
+
+      
               ),
             ),
+            SizedBox(width: 10),
+            
+            Container(
+                            height: 53,
+                            width: 70,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 243, 107, 4),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                // Add logic for posting the comment
+                              },
+                              child: const Center(
+                                child: Text(
+                                  'Search',
+                                  style: CustomTextStyle.semiBoldText,
+                                  // .copyWith(
+                                  //   color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
           ],
         ),
-      ),
-    );
+        Expanded(
+          child: ListView.builder(
+            itemCount: users.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: users[index]['profilePic'].startsWith('http')
+                      ? NetworkImage(users[index]['profilePic'])
+                      : AssetImage(users[index]['profilePic']) as ImageProvider,
+                ),
+                title: Text(users[index]['username'], style: CustomTextStyle.regularText,),
+              );
+            },
+          ),
+        ),
+      ],
+    ),
+  ),
+);
+   
   }
 }

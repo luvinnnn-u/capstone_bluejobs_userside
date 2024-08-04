@@ -2348,7 +2348,6 @@ import 'package:bluejobs_user/styles/textstyle.dart';
 import 'package:bluejobs_user/styles/responsive_utils.dart';
 import 'package:bluejobs_user/screensforhome/settings.dart';
 
-
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -2378,7 +2377,9 @@ class _ProfilePageState extends State<ProfilePage> {
             onPressed: () =>
                 Navigator.of(context).pop(), // Handle the back button press
           ),
-          title: Text('My Profile', style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04))),
+          title: Text('My Profile',
+              style: CustomTextStyle.semiBoldText
+                  .copyWith(fontSize: responsiveSize(context, 0.04))),
         ),
         body: ListView.builder(
           itemCount: 6, // Number of items in the ListView
@@ -2415,20 +2416,127 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget buildCoverImage() => Container(
-        color: Colors.grey,
-        child: Image.asset(
-          'assets/images/marlo.jpg',
-          width: double.infinity,
-          height: coverHeight,
-          fit: BoxFit.cover,
-        ),
+  // Widget buildCoverImage() => Container(
+  //       color: Colors.grey,
+  //       child: Image.asset(
+  //         'assets/images/marlo.jpg',
+  //         width: double.infinity,
+  //         height: coverHeight,
+  //         fit: BoxFit.cover,
+  //       ),
+  //     );
+
+  // Widget buildProfilePicture() => CircleAvatar(
+  //       radius: profileHeight / 2,
+  //       backgroundImage: AssetImage('assets/images/marlo.jpg'),
+  //       backgroundColor: Colors.white,
+  //     );
+
+  Widget buildCoverImage() => Stack(
+        children: [
+          Container(
+            color: Colors.grey,
+            child: Image.asset(
+              'assets/images/marlo.jpg',
+              width: double.infinity,
+              height: coverHeight,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned(
+            right: 10,
+            bottom: 10,
+            child: IconButton(
+              icon: const Icon(Icons.camera_alt, color: Colors.white),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      color: const Color.fromARGB(255, 7, 30, 47),
+                      child: Wrap(
+                        children: [
+                          ListTile(
+                            leading:
+                                const Icon(Icons.photo, color: Colors.white),
+                            title: const Text('Change your cover photo',
+                                style: CustomTextStyle.regularText),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              // Handle cover photo change
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       );
 
-  Widget buildProfilePicture() => CircleAvatar(
-        radius: profileHeight / 2,
-        backgroundImage: AssetImage('assets/images/marlo.jpg'),
-        backgroundColor: Colors.white,
+  Widget buildProfilePicture() => Stack(
+        children: [
+          CircleAvatar(
+            radius: profileHeight / 2,
+            backgroundImage: const AssetImage('assets/images/marlo.jpg'),
+            backgroundColor: Colors.white,
+          ),
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: IconButton(
+              icon: const Icon(Icons.camera_alt, color: Colors.white),
+              onPressed: () {
+                print("Camera icon pressed");
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      color: const Color.fromARGB(255, 7, 30, 47),
+                      child: Wrap(
+                        children: [
+                          ListTile(
+                            leading:
+                                const Icon(Icons.person, color: Colors.white),
+                            title: const Text('See your profile',
+                                style: CustomTextStyle.regularText),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              // Handle see profile
+                            },
+                          ),
+                          ListTile(
+                            leading:
+                                const Icon(Icons.photo, color: Colors.white),
+                            title: const Text('Choose your profile photo',
+                                style: CustomTextStyle.regularText),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              // Handle choose profile photo
+                            },
+                          ),
+                          ListTile(
+                            leading:
+                                const Icon(Icons.camera, color: Colors.white),
+                            title: const Text('Change your profile photo',
+                                style: CustomTextStyle.regularText),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              // Handle change profile photo
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       );
 
   Widget buildProfileName() => Center(
@@ -2436,7 +2544,8 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             Text(
               'Employee',
-              style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),
+              style: CustomTextStyle.semiBoldText
+                  .copyWith(fontSize: responsiveSize(context, 0.04)),
             ),
             SizedBox(height: 4),
           ],
@@ -2468,7 +2577,8 @@ class _ProfilePageState extends State<ProfilePage> {
           labelColor:
               Color.fromARGB(255, 255, 255, 255), // Text color of selected tab
           unselectedLabelColor: Color.fromARGB(255, 124, 118, 118),
-          labelStyle: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.03)),
+          labelStyle: CustomTextStyle.semiBoldText
+              .copyWith(fontSize: responsiveSize(context, 0.03)),
         ),
       );
 
@@ -2491,8 +2601,18 @@ class _ProfilePageState extends State<ProfilePage> {
         location: 'Lives in Albay', // Example location for an employee
         isEmployer: false,
       ),
+       Post(
+        avatarImagePath: 'assets/images/marlo.jpg',
+        username: 'Employee',
+        content:
+            'Looking for house cleaning jobssssssss. Please contact me for more details.',
+        location: 'Lives in Albay', // Example location for an employee
+        isEmployer: false,
+      ),
       // Add more posts if needed
     ];
+
+
 
     return ListView.builder(
       padding: const EdgeInsets.all(10.0),
@@ -2549,7 +2669,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       itemBuilder: (BuildContext context) {
                         return [
                           const PopupMenuItem<String>(
-
                             value: 'edit',
                             child: Text('Edit my post'),
                           ),
@@ -2677,98 +2796,29 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-
-//   Widget buildResumeTab() => SingleChildScrollView(
-//       padding: const EdgeInsets.all(10.0),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           buildResumeItem('Name', 'Marlo'),
-//           buildResumeItem('Age', '21'),
-//           buildResumeItem('Contact Number', '09637077358'),
-//           buildResumeItem('Sex', 'Male'),
-//           buildResumeItem('Address', 'San Antonio, Tabaco City'),
-//           Padding(
-//             padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
-//             child: Text(
-//               'I am mostly good at!',
-//              style: CustomTextStyle.regularText.copyWith(
-//               fontWeight: FontWeight.bold,
-//               fontSize: responsiveSize(context, 0.04),
-//             ),
-//             ),
-//           ),
-//           buildSpecializationChips(['Housecleaning', 'Eating',] ),
-//           SizedBox(height: 20),
-//         ],
-//       ),
-//     );
-
-// Widget buildResumeItem(String title, String content) {
-//   return Padding(
-//     padding: const EdgeInsets.only(bottom: 10.0),
-//     child: RichText(
-//       text: TextSpan(
-//         children: [
-//           TextSpan(
-//             text: '$title: ',
-//             style: CustomTextStyle.regularText.copyWith(
-//               fontWeight: FontWeight.bold,
-//               fontSize: responsiveSize(context, 0.04),
-//             ),
-//           ),
-//           TextSpan(
-//             text: content,
-//             style: CustomTextStyle.regularText.copyWith(
-//               fontSize: responsiveSize(context, 0.04),
-//             ),
-
-//           ),
-//         ],
-//       ),
-//     ),
-//   );
-// }
-
-// Widget buildSpecializationChips(List<String> specializations) {
-//   return Wrap( // Use Wrap instead of Row
-//     spacing: 8.0, // Space between chips
-//     runSpacing: 4.0, // Space between rows
-//     children: specializations.map((specialization) {
-//       return Padding(
-//         padding: const EdgeInsets.symmetric(vertical: 4.0), // Symmetric vertical padding
-//         child: Chip(
-//           backgroundColor: const Color.fromARGB(255, 243, 107, 4), // Orange background
-//           label: Text(
-//             specialization,
-//             style: CustomTextStyle.regularText,
-//           ),
-//         ),
-//       );
-//     }).toList(),
-//   );
-// }
-
-Widget buildResumeTab() {
-  return LayoutBuilder(
-    builder: (context, constraints) {
+   Widget buildResumeTab() {
+    return LayoutBuilder(builder: (context, constraints) {
       return SingleChildScrollView(
-        padding: const EdgeInsets.all(10.0),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: constraints.maxHeight,
+        padding: const EdgeInsets.all(15.0),
+        child: Card(
+          color: Color.fromARGB(255, 9, 38, 60),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
           ),
-          child: IntrinsicHeight(
+          elevation: 4.0,
+          margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildResumeItem('Name', 'Marlo'),
+                buildResumeItem('Name', 'Mark Angelo Cid'),
                 buildResumeItem('Age', '21'),
                 buildResumeItem('Contact Number', '09637077358'),
                 buildResumeItem('Sex', 'Male'),
                 buildResumeItem('Address', 'San Antonio, Tabaco City'),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
+                  padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
                   child: Text(
                     'I am mostly good at!',
                     style: CustomTextStyle.regularText.copyWith(
@@ -2777,63 +2827,149 @@ Widget buildResumeTab() {
                     ),
                   ),
                 ),
-                buildSpecializationChips(['Housecleaning', 'Eating']),
-                SizedBox(height: 20),
+                buildSpecializationChips(['Housecleaning', 'Eating', 'hahahah', 'hehehe']),
+              //  SizedBox(height: 20),
               ],
             ),
           ),
         ),
       );
-    },
-  );
-}
+    });
+  }
 
-Widget buildResumeItem(String title, String content) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 10.0),
-    child: RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: '$title: ',
-            style: CustomTextStyle.regularText.copyWith(
-              fontWeight: FontWeight.bold,
-              fontSize: responsiveSize(context, 0.03),
+  Widget buildResumeItem(String title, String content) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: '$title: ',
+              style: CustomTextStyle.regularText.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: responsiveSize(context, 0.04),
+              ),
             ),
-          ),
-          TextSpan(
-            text: content,
-            style: CustomTextStyle.regularText.copyWith(
-              fontSize: responsiveSize(context, 0.03),
+            TextSpan(
+              text: content,
+              style: CustomTextStyle.regularText.copyWith(
+                fontSize: responsiveSize(context, 0.04),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget buildSpecializationChips(List<String> specializations) {
-  return Wrap(
-    spacing: 8.0,
-    runSpacing: 4.0,
-    children: specializations.map((specialization) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: Chip(
-          backgroundColor: const Color.fromARGB(255, 243, 107, 4),
-          label: Text(
-            specialization,
-            style: CustomTextStyle.regularText.copyWith(
-              color: Colors.white,
+  Widget buildSpecializationChips(List<String> specializations) {
+    return Wrap(
+      spacing: 8.0,
+      runSpacing: 4.0,
+      children: specializations.map((specialization) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: Chip(
+            backgroundColor: const Color.fromARGB(255, 243, 107, 4),
+            label: Text(
+              specialization,
+              style: CustomTextStyle.regularText.copyWith(
+                color: Colors.white,
+              ),
             ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+ 
+
+
+ Widget buildResumeTab(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(15.0),
+      child: Card(
+        color: Color.fromARGB(255, 9, 38, 60),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        elevation: 4.0,
+        margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildResumeItem(context, 'Name', 'Mark Angelo Cid'),
+              buildResumeItem(context, 'Age', '21'),
+              buildResumeItem(context, 'Contact Number', '09637077358'),
+              buildResumeItem(context, 'Sex', 'Male'),
+              buildResumeItem(context, 'Address', 'San Antonio, Tabaco City'),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
+                child: Text(
+                  'I am mostly good at!',
+                  style: CustomTextStyle.regularText.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsiveSize(context, 0.03),
+                  ),
+                ),
+              ),
+              buildSpecializationChips(['Housecleaning', 'Eating']),
+              SizedBox(height: 20),
+            ],
           ),
         ),
-      );
-    }).toList(),
-  );
-}
+      ),
+    );
+  }
 
+  Widget buildResumeItem(BuildContext context, String title, String content) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: '$title: ',
+              style: CustomTextStyle.regularText.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: responsiveSize(context, 0.04),
+              ),
+            ),
+            TextSpan(
+              text: content,
+              style: CustomTextStyle.regularText.copyWith(
+                fontSize: responsiveSize(context, 0.03),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildSpecializationChips(List<String> specializations) {
+    return Wrap(
+      spacing: 8.0,
+      runSpacing: 4.0,
+      children: specializations.map((specialization) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: Chip(
+            backgroundColor: const Color.fromARGB(255, 243, 107, 4),
+            label: Text(
+              specialization,
+              style: CustomTextStyle.regularText.copyWith(
+                color: Colors.white,
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
 
 
   Widget buildConnectionsTab() {
@@ -2841,6 +2977,17 @@ Widget buildSpecializationChips(List<String> specializations) {
       User(
         profileImagePath: 'assets/images/meanne.jpg',
         username: 'Meanne Employer',
+
+      ),
+       User(
+        profileImagePath: 'assets/images/meanne.jpg',
+        username: 'Meann Employer',
+        
+      ),
+      User(
+        profileImagePath: 'assets/images/marlo.jpg',
+        username: 'Marlo Employee',
+        
       ),
     ];
 
@@ -2885,7 +3032,7 @@ Widget buildSpecializationChips(List<String> specializations) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor:  Color.fromARGB(255, 7, 30, 47),
+          backgroundColor: Color.fromARGB(255, 7, 30, 47),
           title: const Text('Delete this User',
               style: CustomTextStyle.regularText),
           content: Text(
@@ -2896,11 +3043,11 @@ Widget buildSpecializationChips(List<String> specializations) {
               child: const Text('Yes', style: CustomTextStyle.regularText),
               onPressed: () {
                 // Handle block action
-                Navigator.of(context).pop();
-                setState(() {
-                  // Update state to reflect that the user is blocked
-                  print('Removed');
-                });
+                // Navigator.of(context).pop();
+                // setState(() {
+                //   // Update state to reflect that the user is blocked
+                //   print('Removed');
+                // });
               },
             ),
             TextButton(
@@ -2921,7 +3068,8 @@ Widget buildSpecializationChips(List<String> specializations) {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ListTile(
-              leading: const Icon(Icons.settings, color: Color.fromARGB(255, 255, 255, 255)),
+              leading: const Icon(Icons.settings,
+                  color: Color.fromARGB(255, 255, 255, 255)),
               title: Text(
                 'Settings',
                 style: CustomTextStyle.semiBoldText.copyWith(
@@ -2929,19 +3077,18 @@ Widget buildSpecializationChips(List<String> specializations) {
                 ),
               ),
               onTap: () {
-          // Navigate to the SettingsPage
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const SettingsPage()),
-          );
-        },
-
-              
+                // Navigate to the SettingsPage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
+                );
+              },
               contentPadding: const EdgeInsets.all(10),
             ),
-           // const SizedBox(height: 10),
+            // const SizedBox(height: 10),
             ListTile(
-              leading: const Icon(Icons.logout_rounded, color: Color.fromARGB(255, 255, 255, 255)),
+              leading: const Icon(Icons.logout_rounded,
+                  color: Color.fromARGB(255, 255, 255, 255)),
               title: Text(
                 'Log Out',
                 style: CustomTextStyle.semiBoldText.copyWith(
@@ -2949,41 +3096,55 @@ Widget buildSpecializationChips(List<String> specializations) {
                 ),
               ),
               onTap: () {
-                 _showLogoutConfirmationDialog(context);
+                _showLogoutConfirmationDialog(context);
               },
               contentPadding: const EdgeInsets.all(10),
             ),
           ],
         ),
       );
-}
- void _showLogoutConfirmationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 7, 30, 47),
-          title: Text('Log out', style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.03))),
-          content: const Text('Are you sure you want to log out?', style: CustomTextStyle.semiBoldText,),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('Hmm, no', style: CustomTextStyle.semiBoldText,),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/signin'); // Navigate to the sign-in page
-              },
-              child:  Text('Yes, Im sure! ', style: CustomTextStyle.semiBoldText.copyWith(color: Colors.orange),),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
+
+
+void _showLogoutConfirmationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Color.fromARGB(255, 7, 30, 47),
+        title: Text('Log out',
+            style: CustomTextStyle.semiBoldText
+                .copyWith(fontSize: responsiveSize(context, 0.03))),
+        content: const Text(
+          'Are you sure you want to log out?',
+          style: CustomTextStyle.semiBoldText,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: const Text(
+              'Hmm, no',
+              style: CustomTextStyle.semiBoldText,
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed(
+                  '/signin'); // Navigate to the sign-in page
+            },
+            child: Text(
+              'Yes, Im sure! ',
+              style:
+                  CustomTextStyle.semiBoldText.copyWith(color: Colors.orange),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
 
 class Post {
   final String avatarImagePath;
@@ -3000,6 +3161,7 @@ class Post {
     required this.location,
   });
 }
+
 
 class User {
   final String profileImagePath;
