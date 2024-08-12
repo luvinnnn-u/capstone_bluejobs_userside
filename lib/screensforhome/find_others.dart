@@ -3741,14 +3741,6 @@ class _FindOthersPageState extends State<FindOthersPage> {
           style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),
         ),
       ),
-
-      // body: showButton
-      //     ? Center(
-      //         child: CustomButton(
-      //           onTap: _startLoading,
-      //           buttonText: 'Find workers near me',
-      //         ),
-      //       )
       body: showButton
     ? Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0), // Adjust the horizontal padding as needed
@@ -3764,20 +3756,6 @@ class _FindOthersPageState extends State<FindOthersPage> {
           ],
         ),
       )
-          // : isLoading
-          //     ? Center(
-          //         child: Column(
-          //           mainAxisAlignment: MainAxisAlignment.center,
-          //           children: [
-          //             const CircularProgressIndicator(color: Colors.white),
-          //             const SizedBox(height: 16),
-          //             Text(
-          //               'Wait for a few seconds...',
-          //               style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
-          //             ),
-          //           ],
-          //         ),
-          //       )
           : isLoading
     ? Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0), // Adjust the horizontal padding as needed

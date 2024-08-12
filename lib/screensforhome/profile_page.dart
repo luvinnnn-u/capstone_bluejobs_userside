@@ -2343,10 +2343,14 @@
 //   });
 // }
 
+import 'package:bluejobs_user/styles/custom_button.dart';
+import 'package:bluejobs_user/styles/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:bluejobs_user/styles/textstyle.dart';
 import 'package:bluejobs_user/styles/responsive_utils.dart';
 import 'package:bluejobs_user/screensforhome/settings.dart';
+//for rating
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -2359,6 +2363,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final double coverHeight = 200;
   final double profileHeight = 100;
   final TextEditingController _commentController = TextEditingController();
+  //for rating
+  double _userRating = 0.0;
 
   Map<int, bool> _showCommentInput = {};
   List<User> users = [];
@@ -2366,7 +2372,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4, // Number of tabs
+      length: 5, // Number of tabs
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 7, 30, 47),
@@ -2416,22 +2422,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // Widget buildCoverImage() => Container(
-  //       color: Colors.grey,
-  //       child: Image.asset(
-  //         'assets/images/marlo.jpg',
-  //         width: double.infinity,
-  //         height: coverHeight,
-  //         fit: BoxFit.cover,
-  //       ),
-  //     );
-
-  // Widget buildProfilePicture() => CircleAvatar(
-  //       radius: profileHeight / 2,
-  //       backgroundImage: AssetImage('assets/images/marlo.jpg'),
-  //       backgroundColor: Colors.white,
-  //     );
-
+//for cover
   Widget buildCoverImage() => Stack(
         children: [
           Container(
@@ -2567,6 +2558,10 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Container(
               width: MediaQuery.of(context).size.width / 4,
+              child: Tab(text: 'Reviews'),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width / 4,
               child: Tab(text: 'Connections'),
             ),
             Container(
@@ -2586,7 +2581,9 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           buildMyPostsTab(),
           buildResumeTab(),
-          buildConnectionsTab(), // Updated to include Connections tab
+          buildReviewsTab(context),
+          // buildReviewsTab(),   //original
+          buildConnectionsTab(),
           buildAboutTab(context),
         ],
       );
@@ -2601,7 +2598,7 @@ class _ProfilePageState extends State<ProfilePage> {
         location: 'Lives in Albay', // Example location for an employee
         isEmployer: false,
       ),
-       Post(
+      Post(
         avatarImagePath: 'assets/images/marlo.jpg',
         username: 'Employee',
         content:
@@ -2611,8 +2608,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       // Add more posts if needed
     ];
-
-
 
     return ListView.builder(
       padding: const EdgeInsets.all(10.0),
@@ -2796,7 +2791,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-   Widget buildResumeTab() {
+  Widget buildResumeTab() {
     return LayoutBuilder(builder: (context, constraints) {
       return SingleChildScrollView(
         padding: const EdgeInsets.all(15.0),
@@ -2827,8 +2822,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                buildSpecializationChips(['Housecleaning', 'Eating', 'hahahah', 'hehehe']),
-              //  SizedBox(height: 20),
+                buildSpecializationChips(
+                    ['Housecleaning', 'Eating', 'hahahah', 'hehehe']),
+                //  SizedBox(height: 20),
               ],
             ),
           ),
@@ -2883,228 +2879,489 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
- 
 
-
- Widget buildResumeTab(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(15.0),
-      child: Card(
-        color: Color.fromARGB(255, 9, 38, 60),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        elevation: 4.0,
-        margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildResumeItem(context, 'Name', 'Mark Angelo Cid'),
-              buildResumeItem(context, 'Age', '21'),
-              buildResumeItem(context, 'Contact Number', '09637077358'),
-              buildResumeItem(context, 'Sex', 'Male'),
-              buildResumeItem(context, 'Address', 'San Antonio, Tabaco City'),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
-                child: Text(
-                  'I am mostly good at!',
-                  style: CustomTextStyle.regularText.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: responsiveSize(context, 0.03),
-                  ),
+Widget buildResumeTab(BuildContext context) {
+  return SingleChildScrollView(
+    padding: const EdgeInsets.all(15.0),
+    child: Card(
+      color: Color.fromARGB(255, 9, 38, 60),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      elevation: 4.0,
+      margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildResumeItem(context, 'Name', 'Mark Angelo Cid'),
+            buildResumeItem(context, 'Age', '21'),
+            buildResumeItem(context, 'Contact Number', '09637077358'),
+            buildResumeItem(context, 'Sex', 'Male'),
+            buildResumeItem(context, 'Address', 'San Antonio, Tabaco City'),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
+              child: Text(
+                'I am mostly good at!',
+                style: CustomTextStyle.regularText.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: responsiveSize(context, 0.03),
                 ),
               ),
-              buildSpecializationChips(['Housecleaning', 'Eating']),
-              SizedBox(height: 20),
-            ],
-          ),
+            ),
+            buildSpecializationChips(['Housecleaning', 'Eating']),
+            SizedBox(height: 20),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
-  Widget buildResumeItem(BuildContext context, String title, String content) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: '$title: ',
-              style: CustomTextStyle.regularText.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: responsiveSize(context, 0.04),
+Widget buildResumeItem(BuildContext context, String title, String content) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 10.0),
+    child: RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: '$title: ',
+            style: CustomTextStyle.regularText.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: responsiveSize(context, 0.04),
+            ),
+          ),
+          TextSpan(
+            text: content,
+            style: CustomTextStyle.regularText.copyWith(
+              fontSize: responsiveSize(context, 0.03),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget buildSpecializationChips(List<String> specializations) {
+  return Wrap(
+    spacing: 8.0,
+    runSpacing: 4.0,
+    children: specializations.map((specialization) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Chip(
+          backgroundColor: const Color.fromARGB(255, 243, 107, 4),
+          label: Text(
+            specialization,
+            style: CustomTextStyle.regularText.copyWith(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
+    }).toList(),
+  );
+}
+
+// Widget buildReviewsTab() {
+//   //note this section can only be viewed by a user thatll leave a review to the application
+//   return  Padding(
+//     padding: EdgeInsets.all(16.0),
+//       child: Card(
+//          color: const Color.fromARGB(255, 7, 30, 47), //original color
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(5),
+//               ),
+//               elevation: 5.0,
+//               margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+//               child:  Padding(
+//                 padding: const EdgeInsets.all(10.0),
+//                 child: Column(
+//                    crossAxisAlignment: CrossAxisAlignment.start,
+//                    children: [
+//                     Row(
+//                       children: [
+//                         CircleAvatar(
+//                           backgroundImage: AssetImage('assets/images/meanne.jpg'),
+//                           radius: 30,
+//                         ),
+//                          SizedBox(width: 20),
+//                        Expanded(
+//                         child: TextFormField(
+//                           decoration: customInputDecoration('   Leave any suggestions!'),
+//                         ),
+
+//                        )
+//                       ],
+//                     )
+//                    ],
+//                 )
+//       ),
+
+//       )
+//   );
+// }
+
+
+
+// Widget buildReviewsTab(BuildContext context) {
+//   double userRating = 0.0;
+
+//   return Padding(
+//     padding: const EdgeInsets.all(16.0),
+//     child: Container(
+//       constraints: BoxConstraints(
+//         maxHeight: MediaQuery.of(context).size.height * 0.5, // Adjust height as needed
+//       ),
+//       decoration: BoxDecoration(
+//         color: const Color.fromARGB(255, 7, 30, 47),
+//         borderRadius: BorderRadius.circular(5),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withOpacity(0.2),
+//             blurRadius: 5,
+//             offset: const Offset(0, 2),
+//           ),
+//         ],
+//       ),
+//       child: Material(
+//         color: Colors.transparent,
+//         child: Padding(
+//           padding: const EdgeInsets.all(10.0),
+//           child: SingleChildScrollView(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Row(
+//                   children: [
+//                     CircleAvatar(
+//                       backgroundImage: const AssetImage('assets/images/meanne.jpg'),
+//                       radius: 30,
+//                     ),
+//                     const SizedBox(width: 20),
+//                     Expanded(
+//                       child: TextFormField(
+//                         decoration: customInputDecoration('Leave a suggestion or review!'),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//                 const SizedBox(height: 10),
+//                 Center(
+//                   child: RatingBar.builder(
+//                     initialRating: 0,
+//                     minRating: 1,
+//                     direction: Axis.horizontal,
+//                     allowHalfRating: true,
+//                     itemCount: 5,
+//                     itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+//                     itemBuilder: (context, _) => const Icon(
+//                       Icons.star,
+//                       color: Color.fromARGB(255, 148, 113, 8),
+//                     ),
+//                     onRatingUpdate: (rating) {
+//                       // setState(() {
+//                       // userRating = rating;
+//                       // });
+//                     },
+//                   ),
+//                 ),
+//                 const SizedBox(height: 10),
+//                 Center(
+//                   child: CustomButton(
+//                     onTap: () {
+//                       // Handle review submission logic here
+//                       print('User Rating: $userRating');
+//                     },
+//                     buttonText: 'Submit Review',
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     ),
+//   );
+// }
+
+
+
+
+Widget buildReviewsTab(BuildContext context) {
+  double userRating = 0.0;
+
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Column(
+      children: [
+        Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.5, // Adjust height as needed
+          ),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 7, 30, 47),
+            borderRadius: BorderRadius.circular(5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 5,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage:
+                              const AssetImage('assets/images/meanne.jpg'),
+                          radius: 30,
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: TextFormField(
+                            decoration: customInputDecoration(
+                                'Leave a suggestion or review!'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: RatingBar.builder(
+                        initialRating: 0,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Color.fromARGB(255, 148, 113, 8),
+                        ),
+                        onRatingUpdate: (rating) {
+                          // setState(() {
+                          // userRating = rating;
+                          // });
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: CustomButton(
+                        onTap: () {
+                          // Handle review submission logic here
+                          print('User Rating: $userRating');
+                        },
+                        buttonText: 'Submit Review',
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            TextSpan(
-              text: content,
-              style: CustomTextStyle.regularText.copyWith(
+          ),
+        ),
+        const SizedBox(height: 20),
+        // Additional Card for profile and review
+        Card(
+          elevation: 4.0,
+          margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage:
+                          const AssetImage('assets/images/meanne.jpg'),
+                      radius: 30,
+                    ),
+                    const SizedBox(width: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Mary Anne', // Replace with the actual user name
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
+                          children: List.generate(
+                            5,
+                            (index) => const Icon(
+                              Icons.star,
+                              color: Color.fromARGB(255, 148, 113, 8),
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'I like it', // Replace with actual user comment
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
+
+Widget buildConnectionsTab() {
+  final users = [
+    User(
+      profileImagePath: 'assets/images/meanne.jpg',
+      username: 'Meanne Employer',
+    ),
+    User(
+      profileImagePath: 'assets/images/meanne.jpg',
+      username: 'Meann Employer',
+    ),
+    User(
+      profileImagePath: 'assets/images/marlo.jpg',
+      username: 'Marlo Employee',
+    ),
+  ];
+
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: ListView.builder(
+      itemCount: users.length,
+      itemBuilder: (context, index) {
+        final user = users[index];
+        return ListTile(
+          leading: CircleAvatar(
+            backgroundImage: AssetImage(user.profileImagePath),
+          ),
+          title: Text(
+            user.username,
+            style: CustomTextStyle.regularText,
+          ),
+          trailing: InkWell(
+            onTap: () => _showConfirmationDialog(context, index),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 243, 107, 4),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                'Unfriend',
+                style: CustomTextStyle.regularText.copyWith(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    ),
+  );
+}
+
+void _showConfirmationDialog(BuildContext context, int index) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Color.fromARGB(255, 7, 30, 47),
+        title:
+            const Text('Delete this User', style: CustomTextStyle.regularText),
+        content: Text(
+            'Are you sure you want to remove this user as your connection?',
+            style: CustomTextStyle.regularText),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Yes', style: CustomTextStyle.regularText),
+            onPressed: () {
+              // Handle block action
+              // Navigator.of(context).pop();
+              // setState(() {
+              //   // Update state to reflect that the user is blocked
+              //   print('Removed');
+              // });
+            },
+          ),
+          TextButton(
+            child: const Text('No', style: CustomTextStyle.regularText),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Widget buildAboutTab(BuildContext context) => Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.settings,
+                color: Color.fromARGB(255, 255, 255, 255)),
+            title: Text(
+              'Settings',
+              style: CustomTextStyle.semiBoldText.copyWith(
                 fontSize: responsiveSize(context, 0.03),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildSpecializationChips(List<String> specializations) {
-    return Wrap(
-      spacing: 8.0,
-      runSpacing: 4.0,
-      children: specializations.map((specialization) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Chip(
-            backgroundColor: const Color.fromARGB(255, 243, 107, 4),
-            label: Text(
-              specialization,
-              style: CustomTextStyle.regularText.copyWith(
-                color: Colors.white,
-              ),
-            ),
+            onTap: () {
+              // Navigate to the SettingsPage
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()),
+              );
+            },
+            contentPadding: const EdgeInsets.all(10),
           ),
-        );
-      }).toList(),
-    );
-  }
-
-
-  Widget buildConnectionsTab() {
-    final users = [
-      User(
-        profileImagePath: 'assets/images/meanne.jpg',
-        username: 'Meanne Employer',
-
-      ),
-       User(
-        profileImagePath: 'assets/images/meanne.jpg',
-        username: 'Meann Employer',
-        
-      ),
-      User(
-        profileImagePath: 'assets/images/marlo.jpg',
-        username: 'Marlo Employee',
-        
-      ),
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ListView.builder(
-        itemCount: users.length,
-        itemBuilder: (context, index) {
-          final user = users[index];
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage(user.profileImagePath),
-            ),
+          // const SizedBox(height: 10),
+          ListTile(
+            leading: const Icon(Icons.logout_rounded,
+                color: Color.fromARGB(255, 255, 255, 255)),
             title: Text(
-              user.username,
-              style: CustomTextStyle.regularText,
-            ),
-            trailing: InkWell(
-              onTap: () => _showConfirmationDialog(context, index),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 243, 107, 4),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Text(
-                  'Unfriend',
-                  style: CustomTextStyle.regularText.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
+              'Log Out',
+              style: CustomTextStyle.semiBoldText.copyWith(
+                fontSize: responsiveSize(context, 0.03),
               ),
             ),
-          );
-        },
+            onTap: () {
+              _showLogoutConfirmationDialog(context);
+            },
+            contentPadding: const EdgeInsets.all(10),
+          ),
+        ],
       ),
     );
-  }
-
-  void _showConfirmationDialog(BuildContext context, int index) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 7, 30, 47),
-          title: const Text('Delete this User',
-              style: CustomTextStyle.regularText),
-          content: Text(
-              'Are you sure you want to remove this user as your connection?',
-              style: CustomTextStyle.regularText),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Yes', style: CustomTextStyle.regularText),
-              onPressed: () {
-                // Handle block action
-                // Navigator.of(context).pop();
-                // setState(() {
-                //   // Update state to reflect that the user is blocked
-                //   print('Removed');
-                // });
-              },
-            ),
-            TextButton(
-              child: const Text('No', style: CustomTextStyle.regularText),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget buildAboutTab(BuildContext context) => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.settings,
-                  color: Color.fromARGB(255, 255, 255, 255)),
-              title: Text(
-                'Settings',
-                style: CustomTextStyle.semiBoldText.copyWith(
-                  fontSize: responsiveSize(context, 0.03),
-                ),
-              ),
-              onTap: () {
-                // Navigate to the SettingsPage
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsPage()),
-                );
-              },
-              contentPadding: const EdgeInsets.all(10),
-            ),
-            // const SizedBox(height: 10),
-            ListTile(
-              leading: const Icon(Icons.logout_rounded,
-                  color: Color.fromARGB(255, 255, 255, 255)),
-              title: Text(
-                'Log Out',
-                style: CustomTextStyle.semiBoldText.copyWith(
-                  fontSize: responsiveSize(context, 0.03),
-                ),
-              ),
-              onTap: () {
-                _showLogoutConfirmationDialog(context);
-              },
-              contentPadding: const EdgeInsets.all(10),
-            ),
-          ],
-        ),
-      );
-
-
 
 void _showLogoutConfirmationDialog(BuildContext context) {
   showDialog(
@@ -3161,7 +3418,6 @@ class Post {
     required this.location,
   });
 }
-
 
 class User {
   final String profileImagePath;
